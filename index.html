@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anchorpoint Markets · Web3 settlement</title>
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome 6 (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <!-- Framer Motion-like animations via custom CSS + intersection observer -->
+  <style>
+    /* ----- Web3 purple theme + ultra realistic animations ----- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0b0719;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #f0edff;
+      overflow-x: hidden;
+    }
+    /* Glassmorphism + neon purple glow */
+    .glass-card {
+      background: rgba(30, 20, 60, 0.55);
+      backdrop-filter: blur(8px) saturate(180%);
+      -webkit-backdrop-filter: blur(8px) saturate(180%);
+      border: 1px solid rgba(180, 130, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(160, 100, 255, 0.05);
+      transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1);
+    }
+    .glass-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      border-color: rgba(180, 130, 255, 0.4);
+      box-shadow: 0 20px 48px rgba(120, 60, 255, 0.25), 0 0 20px rgba(140, 80, 255, 0.15);
+    }
+    /* Purple gradient text */
+    .text-gradient-purple {
+      background: linear-gradient(135deg, #c084fc, #a855f7, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .bg-purple-glow {
+      background: radial-gradient(circle at 30% 40%, rgba(139, 92, 246, 0.2), transparent 70%);
+    }
+    /* animated border glow for buttons */
+    .btn-w3 {
+      background: linear-gradient(145deg, #7c3aed, #6d28d9);
+      border: 1px solid rgba(196, 181, 253, 0.3);
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+      transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-w3::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(45deg, #a78bfa, #7c3aed, #c084fc, #7c3aed);
+      background-size: 300% 300%;
+      border-radius: 9999px;
+      z-index: -1;
+      animation: shimmer 4s ease-in-out infinite;
+      filter: blur(4px);
+      opacity: 0.5;
+    }
+    @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .btn-w3:hover {
+      transform: scale(1.04) translateY(-2px);
+      box-shadow: 0 8px 32px rgba(124, 58, 237, 0.6);
+      border-color: #a78bfa;
+    }
+    /* floating particles (ultra realistic subtle motion) */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(180, 130, 255, 0.2);
+      filter: blur(2px);
+      animation: floatParticle 12s infinite alternate ease-in-out;
+      pointer-events: none;
+    }
+    @keyframes floatParticle {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+      100% { transform: translate(40px, -60px) scale(1.3); opacity: 0.4; }
+    }
+    /* reveal animation (on scroll) */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* micro-interaction: card glow pulse */
+    .pulse-glow {
+      animation: pulseGlow 3s infinite alternate;
+    }
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 8px rgba(139, 92, 246, 0.2); }
+      100% { box-shadow: 0 0 24px rgba(139, 92, 246, 0.5); }
+    }
+    /* whatsapp button floating */
+    .wa-float {
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+    }
+    .wa-float:hover {
+      transform: scale(1.08) rotate(-2deg);
+      filter: drop-shadow(0 0 20px rgba(37, 211, 102, 0.5));
+    }
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0b0719; }
+    ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 12px; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== BACKGROUND PARTICLES (ultra realistic) ===== -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div class="particle" style="width:120px;height:120px;top:10%;left:5%;animation-duration:14s;"></div>
+    <div class="particle" style="width:80px;height:80px;top:70%;left:80%;animation-duration:18s;animation-delay:2s;"></div>
+    <div class="particle" style="width:160px;height:160px;top:40%;left:70%;animation-duration:20s;animation-delay:4s;"></div>
+    <div class="particle" style="width:60px;height:60px;top:80%;left:20%;animation-duration:12s;animation-delay:1s;"></div>
+    <div class="particle" style="width:100px;height:100px;top:20%;left:40%;animation-duration:16s;animation-delay:3s;"></div>
+  </div>
+
+  <!-- ===== NAV ===== -->
+  <header class="relative z-20 bg-[#0b0719]/80 backdrop-blur-xl border-b border-purple-900/30 sticky top-0">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between h-16 md:h-20">
+      <div class="flex items-center space-x-2">
+        <i class="fas fa-link text-purple-400 text-2xl drop-shadow-[0_0_8px_#a855f7]"></i>
+        <span class="text-xl font-bold tracking-tight text-white">Anchorpoint</span>
+        <span class="hidden sm:inline text-sm font-light text-purple-300/70 ml-1">Markets</span>
+      </div>
+      <div class="flex items-center space-x-4 text-sm">
+        <a href="#services" class="hidden md:inline text-gray-300 hover:text-purple-300 transition duration-300">Services</a>
+        <a href="#how-it-works" class="hidden md:inline text-gray-300 hover:text-purple-300 transition duration-300">How it works</a>
+        <a href="#risk" class="hidden md:inline text-gray-300 hover:text-purple-300 transition duration-300">Risk</a>
+        <!-- WhatsApp CTA (nav) -->
+        <a href="https://wa.me/256700941248" target="_blank" rel="noopener noreferrer" class="bg-green-600/20 border border-green-400/30 text-green-300 px-4 py-1.5 rounded-full text-sm font-medium hover:bg-green-600/30 transition flex items-center gap-2">
+          <i class="fab fa-whatsapp"></i> <span class="hidden sm:inline">Chat</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="relative z-10 overflow-hidden bg-[#0b0719] section-pad pt-20 pb-24 md:pt-28 md:pb-32">
+    <div class="absolute inset-0 bg-purple-glow opacity-60"></div>
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 relative">
+      <div class="grid md:grid-cols-5 gap-10 items-center">
+        <div class="md:col-span-3 space-y-6 reveal">
+          <div class="inline-flex items-center gap-2 bg-purple-900/30 backdrop-blur-sm border border-purple-500/20 rounded-full px-4 py-1.5 text-xs font-medium tracking-wider text-purple-300 uppercase">
+            <i class="fas fa-globe-africa"></i> Cross‑border · Web3 native
+          </div>
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">
+            <span class="text-white">Move value across borders</span><br />
+            <span class="text-gradient-purple">with speed and control</span>
+          </h1>
+          <p class="text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed">
+            Structured settlement routes for fiat and digital assets across African and global corridors.
+          </p>
+          <div class="flex flex-wrap gap-4 pt-2">
+            <a href="#services" class="btn-w3 text-white font-semibold px-7 py-3 rounded-full flex items-center gap-2">
+              <i class="fas fa-arrow-right"></i> Explore services
+            </a>
+            <a href="https://wa.me/256700941248" target="_blank" rel="noopener noreferrer" class="border border-purple-500/30 text-white px-7 py-3 rounded-full hover:bg-purple-900/30 transition flex items-center gap-2 backdrop-blur-sm">
+              <i class="fab fa-whatsapp text-green-400"></i> Start trading
+            </a>
+          </div>
+        </div>
+        <div class="md:col-span-2 hidden md:flex justify-center relative">
+          <div class="glass-card p-6 rounded-3xl w-full max-w-xs pulse-glow">
+            <div class="grid grid-cols-2 gap-3 text-center">
+              <div class="bg-purple-900/20 p-4 rounded-xl border border-purple-500/10"><i class="fas fa-bolt text-purple-400 text-2xl"></i><div class="text-xs mt-1 text-gray-300">Fast settlement</div></div>
+              <div class="bg-purple-900/20 p-4 rounded-xl border border-purple-500/10"><i class="fas fa-coins text-purple-400 text-2xl"></i><div class="text-xs mt-1 text-gray-300">Liquidity</div></div>
+              <div class="bg-purple-900/20 p-4 rounded-xl border border-purple-500/10"><i class="fas fa-handshake text-purple-400 text-2xl"></i><div class="text-xs mt-1 text-gray-300">Verified counterparties</div></div>
+              <div class="bg-purple-900/20 p-4 rounded-xl border border-purple-500/10"><i class="fas fa-chart-line text-purple-400 text-2xl"></i><div class="text-xs mt-1 text-gray-300">Consistent pricing</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 1: WHAT YOU GET ===== -->
+  <section class="relative z-10 section-pad bg-[#0f0b1f]">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-14 reveal">
+        <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-gem mr-2"></i>What you get</span>
+        <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Built for cross‑border efficiency</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass-card p-6 rounded-2xl reveal"><i class="fas fa-rocket text-purple-400 text-2xl mb-3"></i><h3 class="font-semibold text-lg">Fast settlement</h3><p class="text-gray-300 text-sm mt-1">For cross border payments, near real‑time finality.</p></div>
+        <div class="glass-card p-6 rounded-2xl reveal"><i class="fas fa-water text-purple-400 text-2xl mb-3"></i><h3 class="font-semibold text-lg">Reliable liquidity</h3><p class="text-gray-300 text-sm mt-1">Across UGX, USD, KES and digital assets.</p></div>
+        <div class="glass-card p-6 rounded-2xl reveal"><i class="fas fa-user-check text-purple-400 text-2xl mb-3"></i><h3 class="font-semibold text-lg">Verified counterparties</h3><p class="text-gray-300 text-sm mt-1">Each transaction matched with trusted parties.</p></div>
+        <div class="glass-card p-6 rounded-2xl reveal"><i class="fas fa-balance-scale text-purple-400 text-2xl mb-3"></i><h3 class="font-semibold text-lg">Consistent pricing</h3><p class="text-gray-300 text-sm mt-1">Across trading corridors, no hidden spreads.</p></div>
+        <div class="glass-card p-6 rounded-2xl reveal"><i class="fas fa-clipboard-list text-purple-400 text-2xl mb-3"></i><h3 class="font-semibold text-lg">Clear tracking</h3><p class="text-gray-300 text-sm mt-1">Transaction tracking from start to finish.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 2: WHO THIS SERVES ===== -->
+  <section class="relative z-10 section-pad bg-[#0b0719]">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-14 reveal">
+        <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-users mr-2"></i>Who this serves</span>
+        <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Modern trade ecosystem</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="flex items-start gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-ship text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Import & export operators</span><p class="text-gray-400 text-sm">Streamline cross‑border payments</p></div></div>
+        <div class="flex items-start gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-laptop-code text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Freelancers</span><p class="text-gray-400 text-sm">Receiving international payments</p></div></div>
+        <div class="flex items-start gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-arrow-right-arrow-left text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Regional traders</span><p class="text-gray-400 text-sm">Moving capital between countries</p></div></div>
+        <div class="flex items-start gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-bitcoin text-purple-400 text-xl mt-1"></i><div><span class="font-medium">OTC participants</span><p class="text-gray-400 text-sm">Handling digital asset flows</p></div></div>
+        <div class="flex items-start gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-building-columns text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Financial intermediaries</span><p class="text-gray-400 text-sm">Managing client settlements</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3: CORE SERVICES ===== -->
+  <section id="services" class="relative z-10 section-pad bg-[#0f0b1f]">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-14 reveal">
+        <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-cogs mr-2"></i>Core services</span>
+        <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">End‑to‑end settlement infrastructure</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-coins text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Crypto to fiat</h4><p class="text-gray-300 text-sm">Conversion & settlement</p></div>
+        <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-money-bill-wave text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Fiat to crypto</h4><p class="text-gray-300 text-sm">On‑ramp & liquidity</p></div>
+        <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-globe text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Cross‑border settlement</h4><p class="text-gray-300 text-sm">Payment finality</p></div>
+        <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-hand-holding-heart text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Liquidity matching</h4><p class="text-gray-300 text-sm">Between markets</p></div>
+        <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-chart-pie text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Treasury coordination</h4><p class="text-gray-300 text-sm">For high volume flows</p></div>
+        <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-shield-alt text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Verified execution</h4><p class="text-gray-300 text-sm">Counterparty execution</p></div>
+      </div>
+      <!-- JSON component -->
+      <script type="application/json" id="services-json">
+      {
+        "services": ["Crypto to fiat conversion", "Fiat to crypto conversion", "Cross border payment settlement", "Liquidity matching between markets", "Treasury coordination for high volume flows", "Verified counterparty execution"]
+      }
+      </script>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4: HOW IT WORKS ===== -->
+  <section id="how-it-works" class="relative z-10 section-pad bg-[#0b0719]">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-14 reveal">
+        <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-circle-info mr-2"></i>How it works</span>
+        <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Simple, structured process</h2>
+      </div>
+      <div class="grid md:grid-cols-5 gap-4 text-center">
+        <div class="glass-card p-5 rounded-2xl reveal"><span class="text-purple-400 text-2xl font-bold">1</span><h4 class="font-semibold mt-2">Onboarding</h4><p class="text-gray-300 text-xs">Identity verification</p></div>
+        <div class="glass-card p-5 rounded-2xl reveal"><span class="text-purple-400 text-2xl font-bold">2</span><h4 class="font-semibold mt-2">Quote</h4><p class="text-gray-300 text-xs">Based on live liquidity</p></div>
+        <div class="glass-card p-5 rounded-2xl reveal"><span class="text-purple-400 text-2xl font-bold">3</span><h4 class="font-semibold mt-2">Match</h4><p class="text-gray-300 text-xs">With verified counterparty</p></div>
+        <div class="glass-card p-5 rounded-2xl reveal"><span class="text-purple-400 text-2xl font-bold">4</span><h4 class="font-semibold mt-2">Settle</h4><p class="text-gray-300 text-xs">Through agreed rails</p></div>
+        <div class="glass-card p-5 rounded-2xl reveal"><span class="text-purple-400 text-2xl font-bold">5</span><h4 class="font-semibold mt-2">Audit</h4><p class="text-gray-300 text-xs">Recorded for tracking</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 5: WHY ANCHORPOINT ===== -->
+  <section class="relative z-10 section-pad bg-[#0f0b1f]">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-14 reveal">
+        <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-star mr-2"></i>Why Anchorpoint Markets</span>
+        <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Built for speed & reliability</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="flex items-center gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-gauge-high text-purple-400 text-2xl"></i><div><h4 class="font-semibold">Execution speed</h4><p class="text-gray-300 text-sm">For time‑sensitive flows</p></div></div>
+        <div class="flex items-center gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-arrows-spin text-purple-400 text-2xl"></i><div><h4 class="font-semibold">Structured liquidity</h4><p class="text-gray-300 text-sm">Access across regions</p></div></div>
+        <div class="flex items-center gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-triangle-exclamation text-purple-400 text-2xl"></i><div><h4 class="font-semibold">Reduced failure risk</h4><p class="text-gray-300 text-sm">Settlement reliability</p></div></div>
+        <div class="flex items-center gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-rotate text-purple-400 text-2xl"></i><div><h4 class="font-semibold">Repeatable process</h4><p class="text-gray-300 text-sm">Consistent transaction flow</p></div></div>
+        <div class="flex items-center gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-location-dot text-purple-400 text-2xl"></i><div><h4 class="font-semibold">Regional focus</h4><p class="text-gray-300 text-sm">East Africa corridors</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 6: RISK CONTROL ===== -->
+  <section id="risk" class="relative z-10 section-pad bg-[#0b0719]">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="text-center mb-14 reveal">
+        <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-shield mr-2"></i>Risk control</span>
+        <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Enterprise‑grade safeguards</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-500 reveal"><i class="fas fa-id-card text-purple-400 text-2xl mb-2"></i><h4 class="font-semibold">Identity verification</h4><p class="text-gray-300 text-sm">For all clients</p></div>
+        <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-500 reveal"><i class="fas fa-file-lines text-purple-400 text-2xl mb-2"></i><h4 class="font-semibold">Transaction logs</h4><p class="text-gray-300 text-sm">Stored per trade</p></div>
+        <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-500 reveal"><i class="fas fa-credit-card text-purple-400 text-2xl mb-2"></i><h4 class="font-semibold">Daily exposure limits</h4><p class="text-gray-300 text-sm">Per currency</p></div>
+        <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-500 reveal"><i class="fas fa-star-half-stroke text-purple-400 text-2xl mb-2"></i><h4 class="font-semibold">Counterparty rating</h4><p class="text-gray-300 text-sm">Systematic rating</p></div>
+        <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-500 reveal"><i class="fas fa-umbrella text-purple-400 text-2xl mb-2"></i><h4 class="font-semibold">Funds segregation</h4><p class="text-gray-300 text-sm">Client vs operational funds</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 7: START TRADING ===== -->
+  <section id="start" class="relative z-10 section-pad bg-gradient-to-b from-[#0f0b1f] to-[#0b0719]">
+    <div class="max-w-4xl mx-auto px-5 sm:px-8 text-center">
+      <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-play mr-2"></i>Start trading</span>
+      <h2 class="text-3xl md:text-5xl font-bold mt-2 text-white">Begin with small volume</h2>
+      <div class="grid sm:grid-cols-2 gap-4 mt-8 text-left">
+        <div class="glass-card p-5 rounded-xl flex items-start gap-3 reveal"><i class="fas fa-arrow-trend-up text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Small settlements</span><p class="text-gray-300 text-sm">Start with low volume</p></div></div>
+        <div class="glass-card p-5 rounded-xl flex items-start gap-3 reveal"><i class="fas fa-clock-rotate-left text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Build history</span><p class="text-gray-300 text-sm">Over repeat trades</p></div></div>
+        <div class="glass-card p-5 rounded-xl flex items-start gap-3 reveal"><i class="fas fa-scale-balanced text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Scale volume</span><p class="text-gray-300 text-sm">After trust patterns form</p></div></div>
+        <div class="glass-card p-5 rounded-xl flex items-start gap-3 reveal"><i class="fas fa-route text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Expand corridors</span><p class="text-gray-300 text-sm">Once liquidity stabilizes</p></div></div>
+      </div>
+      <div class="mt-10">
+        <a href="https://wa.me/256700941248" target="_blank" rel="noopener noreferrer" class="btn-w3 text-white font-bold px-10 py-4 rounded-full inline-flex items-center gap-3 text-lg">
+          <i class="fab fa-whatsapp text-xl"></i> Start now on WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="relative z-10 border-t border-purple-900/30 bg-[#0b0719]/80 py-8 backdrop-blur-sm">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-link text-purple-400 text-xl"></i>
+        <span class="font-bold text-white">Anchorpoint Markets</span>
+        <span class="text-gray-400 text-sm hidden sm:inline">·</span>
+        <span class="text-gray-400 text-sm">Cross border settlement infrastructure for modern trade</span>
+      </div>
+      <div class="flex gap-4 text-gray-400 text-sm">
+        <span>© 2026</span>
+        <span class="hidden sm:inline">·</span>
+        <span class="flex items-center gap-1"><i class="fas fa-location-dot text-purple-400/70"></i> East Africa</span>
+        <a href="https://wa.me/256700941248" target="_blank" rel="noopener noreferrer" class="text-green-400 hover:text-green-300 transition"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== INTERSECTION OBSERVER (reveal animations) ===== -->
+  <script>
+    (function() {
+      const elements = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -20px 0px' });
+      elements.forEach(el => observer.observe(el));
+
+      // log JSON component
+      try {
+        const jsonEl = document.getElementById('services-json');
+        if (jsonEl) console.log('📦 Services JSON:', JSON.parse(jsonEl.textContent));
+      } catch(e) { /* ignore */ }
+    })();
+  </script>
+</body>
+</html>
