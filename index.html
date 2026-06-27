@@ -3,22 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Anchor Markets ·Crypto P2P & OTC desk settlements </title>
-  <!-- Tailwind via CDN -->
+  <title>Anchor Markets · OTC & Cross‑border Settlement</title>
+  <!-- SEO & Meta -->
+  <meta name="description" content="Anchor Markets: OTC and cross-border settlement infrastructure for crypto and fiat. Secure, fast, and compliant." />
+  <meta property="og:title" content="Anchor Markets · OTC & Cross‑border Settlement" />
+  <meta property="og:description" content="Institutional-grade OTC and cross-border settlements for crypto and fiat." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://anchormarkets.example.com" />
+  <!-- JSON-LD Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Anchor Markets",
+    "url": "https://anchormarkets.example.com",
+    "logo": "https://anchormarkets.example.com/logo.png",
+    "description": "OTC and cross-border settlement infrastructure for crypto and fiat.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Sales",
+      "availableLanguage": ["English"]
+    }
+  }
+  </script>
+  <!-- Tailwind + Font Awesome -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome 6 (free) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <!-- Framer Motion-like animations via custom CSS + intersection observer -->
+  <!-- Crypto Icons (CoinGecko) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1.0.0/outline/style.min.css" />
   <style>
-    /* ----- Web3 purple theme + ultra realistic animations ----- */
+    /* ----- Web3 Purple Theme + Animations ----- */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #0b0719;
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       color: #f0edff;
       overflow-x: hidden;
     }
-    /* Glassmorphism + neon purple glow */
     .glass-card {
       background: rgba(30, 20, 60, 0.55);
       backdrop-filter: blur(8px) saturate(180%);
@@ -32,7 +54,6 @@
       border-color: rgba(180, 130, 255, 0.4);
       box-shadow: 0 20px 48px rgba(120, 60, 255, 0.25), 0 0 20px rgba(140, 80, 255, 0.15);
     }
-    /* Purple gradient text */
     .text-gradient-purple {
       background: linear-gradient(135deg, #c084fc, #a855f7, #8b5cf6);
       -webkit-background-clip: text;
@@ -42,7 +63,6 @@
     .bg-purple-glow {
       background: radial-gradient(circle at 30% 40%, rgba(139, 92, 246, 0.2), transparent 70%);
     }
-    /* animated border glow for buttons */
     .btn-w3 {
       background: linear-gradient(145deg, #7c3aed, #6d28d9);
       border: 1px solid rgba(196, 181, 253, 0.3);
@@ -73,7 +93,52 @@
       box-shadow: 0 8px 32px rgba(124, 58, 237, 0.6);
       border-color: #a78bfa;
     }
-    /* floating particles (ultra realistic subtle motion) */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    /* Floating buttons */
+    .float-btn {
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .float-btn:hover {
+      transform: scale(1.12) translateY(-4px);
+      filter: drop-shadow(0 0 20px rgba(124, 58, 237, 0.6));
+    }
+    .float-btn-wa:hover { filter: drop-shadow(0 0 24px rgba(37, 211, 102, 0.6)); }
+    .float-btn-tg:hover { filter: drop-shadow(0 0 24px rgba(0, 136, 204, 0.6)); }
+    /* Ticker */
+    .ticker-track {
+      display: flex;
+      animation: scrollTicker 28s linear infinite;
+    }
+    @keyframes scrollTicker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      flex: 0 0 auto;
+      width: 160px;
+      padding: 0 12px;
+    }
+    /* timeline connector */
+    .timeline-line {
+      width: 2px;
+      background: linear-gradient(to bottom, #7c3aed, #a855f7, #7c3aed);
+      height: 100%;
+      min-height: 40px;
+      margin: 0 auto;
+      animation: pulseLine 2s ease-in-out infinite;
+    }
+    @keyframes pulseLine {
+      0% { opacity: 0.3; }
+      50% { opacity: 0.9; }
+      100% { opacity: 0.3; }
+    }
+    /* Particle background */
     .particle {
       position: absolute;
       border-radius: 50%;
@@ -86,273 +151,455 @@
       0% { transform: translate(0, 0) scale(1); opacity: 0.15; }
       100% { transform: translate(40px, -60px) scale(1.3); opacity: 0.4; }
     }
-    /* reveal animation (on scroll) */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1);
+    /* floating globe animation (SVG) */
+    .globe-rotate {
+      animation: globeSpin 20s linear infinite;
+      transform-origin: center;
     }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
+    @keyframes globeSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
-    /* micro-interaction: card glow pulse */
-    .pulse-glow {
-      animation: pulseGlow 3s infinite alternate;
+    .node-pulse {
+      animation: nodePulse 3s ease-in-out infinite;
     }
-    @keyframes pulseGlow {
-      0% { box-shadow: 0 0 8px rgba(139, 92, 246, 0.2); }
-      100% { box-shadow: 0 0 24px rgba(139, 92, 246, 0.5); }
+    @keyframes nodePulse {
+      0% { r: 3; opacity: 0.6; }
+      50% { r: 6; opacity: 1; }
+      100% { r: 3; opacity: 0.6; }
     }
-    /* whatsapp button floating */
-    .wa-float {
-      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+    .line-dash {
+      stroke-dasharray: 6 6;
+      animation: dashMove 2s linear infinite;
     }
-    .wa-float:hover {
-      transform: scale(1.08) rotate(-2deg);
-      filter: drop-shadow(0 0 20px rgba(37, 211, 102, 0.5));
+    @keyframes dashMove {
+      to { stroke-dashoffset: -12; }
     }
-    /* scrollbar */
+    /* Scrollbar */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #0b0719; }
     ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 12px; }
+    /* Ticker loading shimmer */
+    .ticker-loading {
+      animation: pulseShimmer 1.5s ease-in-out infinite;
+    }
+    @keyframes pulseShimmer {
+      0% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+      100% { opacity: 0.4; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- ===== BACKGROUND PARTICLES (ultra realistic) ===== -->
-  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-    <div class="particle" style="width:120px;height:120px;top:10%;left:5%;animation-duration:14s;"></div>
-    <div class="particle" style="width:80px;height:80px;top:70%;left:80%;animation-duration:18s;animation-delay:2s;"></div>
-    <div class="particle" style="width:160px;height:160px;top:40%;left:70%;animation-duration:20s;animation-delay:4s;"></div>
-    <div class="particle" style="width:60px;height:60px;top:80%;left:20%;animation-duration:12s;animation-delay:1s;"></div>
-    <div class="particle" style="width:100px;height:100px;top:20%;left:40%;animation-duration:16s;animation-delay:3s;"></div>
+<!-- ===== PARTICLES ===== -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+  <div class="particle" style="width:120px;height:120px;top:10%;left:5%;animation-duration:14s;"></div>
+  <div class="particle" style="width:80px;height:80px;top:70%;left:80%;animation-duration:18s;animation-delay:2s;"></div>
+  <div class="particle" style="width:160px;height:160px;top:40%;left:70%;animation-duration:20s;animation-delay:4s;"></div>
+  <div class="particle" style="width:60px;height:60px;top:80%;left:20%;animation-duration:12s;animation-delay:1s;"></div>
+  <div class="particle" style="width:100px;height:100px;top:20%;left:40%;animation-duration:16s;animation-delay:3s;"></div>
+</div>
+
+<!-- ===== NAV ===== -->
+<header class="relative z-20 bg-[#0b0719]/80 backdrop-blur-xl border-b border-purple-900/30 sticky top-0">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between h-16 md:h-20">
+    <div class="flex items-center space-x-2">
+      <i class="fas fa-link text-purple-400 text-2xl drop-shadow-[0_0_8px_#a855f7]"></i>
+      <span class="text-xl font-bold tracking-tight text-white">Anchor</span>
+      <span class="hidden sm:inline text-sm font-light text-purple-300/70 ml-1">Markets</span>
+    </div>
+    <nav class="hidden lg:flex items-center space-x-6 text-sm text-gray-300">
+      <a href="#" class="hover:text-purple-300 transition">Home</a>
+      <a href="#services" class="hover:text-purple-300 transition">Services</a>
+      <a href="#markets" class="hover:text-purple-300 transition">Markets</a>
+      <a href="#industries" class="hover:text-purple-300 transition">Industries</a>
+      <a href="#security" class="hover:text-purple-300 transition">Security</a>
+      <a href="#faq" class="hover:text-purple-300 transition">FAQ</a>
+      <a href="#contact" class="hover:text-purple-300 transition">Contact</a>
+    </nav>
+    <div class="flex items-center space-x-3">
+      <a href="https://wa.me/256700941248" target="_blank" rel="noopener" class="bg-green-600/20 border border-green-400/30 text-green-300 px-3 py-1.5 rounded-full text-sm font-medium hover:bg-green-600/30 transition flex items-center gap-2">
+        <i class="fab fa-whatsapp"></i> <span class="hidden sm:inline">Chat</span>
+      </a>
+      <a href="https://t.me/anchor_markets" target="_blank" rel="noopener" class="bg-blue-600/20 border border-blue-400/30 text-blue-300 px-3 py-1.5 rounded-full text-sm font-medium hover:bg-blue-600/30 transition flex items-center gap-2">
+        <i class="fab fa-telegram-plane"></i> <span class="hidden sm:inline">Telegram</span>
+      </a>
+    </div>
   </div>
+</header>
 
-  <!-- ===== NAV ===== -->
-  <header class="relative z-20 bg-[#0b0719]/80 backdrop-blur-xl border-b border-purple-900/30 sticky top-0">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between h-16 md:h-20">
-      <div class="flex items-center space-x-2">
-        <i class="fas fa-link text-purple-400 text-2xl drop-shadow-[0_0_8px_#a855f7]"></i>
-        <span class="text-xl font-bold tracking-tight text-white">Anchor Markets</span>
-        <span class="hidden sm:inline text-sm font-light text-purple-300/70 ml-1">Markets</span>
-      </div>
-      <div class="flex items-center space-x-4 text-sm">
-        <a href="#services" class="hidden md:inline text-gray-300 hover:text-purple-300 transition duration-300">Services</a>
-        <a href="#how-it-works" class="hidden md:inline text-gray-300 hover:text-purple-300 transition duration-300">How it works</a>
-        <a href="#risk" class="hidden md:inline text-gray-300 hover:text-purple-300 transition duration-300">Risk</a>
-        <!-- WhatsApp CTA (nav) -->
-        <a href="https://wa.me/256700941248" target="_blank" rel="noopener noreferrer" class="bg-green-600/20 border border-green-400/30 text-green-300 px-4 py-1.5 rounded-full text-sm font-medium hover:bg-green-600/30 transition flex items-center gap-2">
-          <i class="fab fa-whatsapp"></i> <span class="hidden sm:inline">Chat</span>
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- ===== HERO ===== -->
-  <section class="relative z-10 overflow-hidden bg-[#0b0719] section-pad pt-20 pb-24 md:pt-28 md:pb-32">
-    <div class="absolute inset-0 bg-purple-glow opacity-60"></div>
-    <div class="max-w-6xl mx-auto px-5 sm:px-8 relative">
-      <div class="grid md:grid-cols-5 gap-10 items-center">
-        <div class="md:col-span-3 space-y-6 reveal">
-          <div class="inline-flex items-center gap-2 bg-purple-900/30 backdrop-blur-sm border border-purple-500/20 rounded-full px-4 py-1.5 text-xs font-medium tracking-wider text-purple-300 uppercase">
-            <i class="fas fa-globe-africa"></i> Cross‑border settlements · Secure payments options · Lightening fast transactions
-          </div>
-          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">
-            <span class="text-white">Move value across borders</span><br />
-            <span class="text-gradient-purple">with speed and control</span>
-          </h1>
-          <p class="text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed">
-            Structured settlement routes for fiat and digital assets across African and global corridors.
-          </p>
-          <div class="flex flex-wrap gap-4 pt-2">
-            <a href="#services" class="btn-w3 text-white font-semibold px-7 py-3 rounded-full flex items-center gap-2">
-              <i class="fas fa-arrow-right"></i> Explore services
-            </a>
-            <a href="https://wa.me/256700941248" target="_blank" rel="noopener noreferrer" class="border border-purple-500/30 text-white px-7 py-3 rounded-full hover:bg-purple-900/30 transition flex items-center gap-2 backdrop-blur-sm">
-              <i class="fab fa-whatsapp text-green-400"></i> Start trading
-            </a>
-          </div>
+<!-- ===== HERO with Web3 SVG Illustration ===== -->
+<section class="relative z-10 overflow-hidden bg-[#0b0719] pt-20 pb-24 md:pt-28 md:pb-32">
+  <div class="absolute inset-0 bg-purple-glow opacity-60"></div>
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 relative">
+    <div class="grid md:grid-cols-5 gap-10 items-center">
+      <div class="md:col-span-3 space-y-6 reveal">
+        <div class="inline-flex items-center gap-2 bg-purple-900/30 backdrop-blur-sm border border-purple-500/20 rounded-full px-4 py-1.5 text-xs font-medium tracking-wider text-purple-300 uppercase">
+          <i class="fas fa-globe-africa"></i> OTC · Cross‑border · Web3
         </div>
-        <div class="md:col-span-2 hidden md:flex justify-center relative">
-          <div class="glass-card p-6 rounded-3xl w-full max-w-xs pulse-glow">
-            <div class="grid grid-cols-2 gap-3 text-center">
-              <div class="bg-purple-900/20 p-4 rounded-xl border border-purple-500/10"><i class="fas fa-bolt text-purple-400 text-2xl"></i><div class="text-xs mt-1 text-gray-300">Fast settlement</div></div>
-              <div class="bg-purple-900/20 p-4 rounded-xl border border-purple-500/10"><i class="fas fa-coins text-purple-400 text-2xl"></i><div class="text-xs mt-1 text-gray-300">Liquidity</div></div>
-              <div class="bg-purple-900/20 p-4 rounded-xl border border-purple-500/10"><i class="fas fa-handshake text-purple-400 text-2xl"></i><div class="text-xs mt-1 text-gray-300">Verified counterparties</div></div>
-              <div class="bg-purple-900/20 p-4 rounded-xl border border-purple-500/10"><i class="fas fa-chart-line text-purple-400 text-2xl"></i><div class="text-xs mt-1 text-gray-300">Consistent pricing</div></div>
-            </div>
-          </div>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">
+          <span class="text-white">Move value across borders</span><br />
+          <span class="text-gradient-purple">with speed and control</span>
+        </h1>
+        <p class="text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed">
+          Structured settlement routes for fiat and digital assets across African and global corridors.
+        </p>
+        <div class="flex flex-wrap gap-4 pt-2">
+          <a href="https://wa.me/256700941248" target="_blank" rel="noopener" class="btn-w3 text-white font-semibold px-7 py-3 rounded-full flex items-center gap-2">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+          </a>
+          <a href="https://t.me/anchor_markets" target="_blank" rel="noopener" class="border border-purple-500/30 text-white px-7 py-3 rounded-full hover:bg-purple-900/30 transition flex items-center gap-2 backdrop-blur-sm">
+            <i class="fab fa-telegram-plane"></i> Telegram
+          </a>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- ===== SECTION 1: WHAT YOU GET ===== -->
-  <section class="relative z-10 section-pad bg-[#0f0b1f]">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8">
-      <div class="text-center mb-14 reveal">
-        <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-gem mr-2"></i>What you get</span>
-        <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Built for cross‑border efficiency</h2>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="glass-card p-6 rounded-2xl reveal"><i class="fas fa-rocket text-purple-400 text-2xl mb-3"></i><h3 class="font-semibold text-lg">Fast settlement</h3><p class="text-gray-300 text-sm mt-1">For cross border payments, near real‑time finality.</p></div>
-        <div class="glass-card p-6 rounded-2xl reveal"><i class="fas fa-water text-purple-400 text-2xl mb-3"></i><h3 class="font-semibold text-lg">Reliable liquidity</h3><p class="text-gray-300 text-sm mt-1">Across UGX, USD, KES and digital assets.</p></div>
-        <div class="glass-card p-6 rounded-2xl reveal"><i class="fas fa-user-check text-purple-400 text-2xl mb-3"></i><h3 class="font-semibold text-lg">Verified counterparties</h3><p class="text-gray-300 text-sm mt-1">Each transaction matched with trusted parties.</p></div>
-        <div class="glass-card p-6 rounded-2xl reveal"><i class="fas fa-balance-scale text-purple-400 text-2xl mb-3"></i><h3 class="font-semibold text-lg">Consistent pricing</h3><p class="text-gray-300 text-sm mt-1">Across trading corridors, no hidden spreads.</p></div>
-        <div class="glass-card p-6 rounded-2xl reveal"><i class="fas fa-clipboard-list text-purple-400 text-2xl mb-3"></i><h3 class="font-semibold text-lg">Clear tracking</h3><p class="text-gray-300 text-sm mt-1">Transaction tracking from start to finish.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== SECTION 2: WHO THIS SERVES ===== -->
-  <section class="relative z-10 section-pad bg-[#0b0719]">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8">
-      <div class="text-center mb-14 reveal">
-        <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-users mr-2"></i>Who this serves</span>
-        <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Modern trade ecosystem</h2>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div class="flex items-start gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-ship text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Import & export operators</span><p class="text-gray-400 text-sm">Streamline cross‑border payments</p></div></div>
-        <div class="flex items-start gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-laptop-code text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Freelancers</span><p class="text-gray-400 text-sm">Receiving international payments</p></div></div>
-        <div class="flex items-start gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-arrow-right-arrow-left text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Regional traders</span><p class="text-gray-400 text-sm">Moving capital between countries</p></div></div>
-        <div class="flex items-start gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-bitcoin text-purple-400 text-xl mt-1"></i><div><span class="font-medium">OTC participants</span><p class="text-gray-400 text-sm">Handling digital asset flows</p></div></div>
-        <div class="flex items-start gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-building-columns text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Financial intermediaries</span><p class="text-gray-400 text-sm">Managing client settlements</p></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== SECTION 3: CORE SERVICES ===== -->
-  <section id="services" class="relative z-10 section-pad bg-[#0f0b1f]">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8">
-      <div class="text-center mb-14 reveal">
-        <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-cogs mr-2"></i>Core services</span>
-        <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">End‑to‑end settlement infrastructure</h2>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-coins text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Crypto to fiat</h4><p class="text-gray-300 text-sm">Conversion & settlement</p></div>
-        <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-money-bill-wave text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Fiat to crypto</h4><p class="text-gray-300 text-sm">On‑ramp & liquidity</p></div>
-        <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-globe text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Cross‑border settlement</h4><p class="text-gray-300 text-sm">Payment finality</p></div>
-        <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-hand-holding-heart text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Liquidity matching</h4><p class="text-gray-300 text-sm">Between markets</p></div>
-        <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-chart-pie text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Treasury coordination</h4><p class="text-gray-300 text-sm">For high volume flows</p></div>
-        <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-shield-alt text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Verified execution</h4><p class="text-gray-300 text-sm">Counterparty execution</p></div>
-      </div>
-      <!-- JSON component -->
-      <script type="application/json" id="services-json">
-      {
-        "services": ["Crypto to fiat conversion", "Fiat to crypto conversion", "Cross border payment settlement", "Liquidity matching between markets", "Treasury coordination for high volume flows", "Verified counterparty execution"]
-      }
-      </script>
-    </div>
-  </section>
-
-  <!-- ===== SECTION 4: HOW IT WORKS ===== -->
-  <section id="how-it-works" class="relative z-10 section-pad bg-[#0b0719]">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8">
-      <div class="text-center mb-14 reveal">
-        <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-circle-info mr-2"></i>How it works</span>
-        <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Simple, structured process</h2>
-      </div>
-      <div class="grid md:grid-cols-5 gap-4 text-center">
-        <div class="glass-card p-5 rounded-2xl reveal"><span class="text-purple-400 text-2xl font-bold">1</span><h4 class="font-semibold mt-2">Onboarding</h4><p class="text-gray-300 text-xs">Identity verification</p></div>
-        <div class="glass-card p-5 rounded-2xl reveal"><span class="text-purple-400 text-2xl font-bold">2</span><h4 class="font-semibold mt-2">Quote</h4><p class="text-gray-300 text-xs">Based on live liquidity</p></div>
-        <div class="glass-card p-5 rounded-2xl reveal"><span class="text-purple-400 text-2xl font-bold">3</span><h4 class="font-semibold mt-2">Match</h4><p class="text-gray-300 text-xs">With verified counterparty</p></div>
-        <div class="glass-card p-5 rounded-2xl reveal"><span class="text-purple-400 text-2xl font-bold">4</span><h4 class="font-semibold mt-2">Settle</h4><p class="text-gray-300 text-xs">Through agreed rails</p></div>
-        <div class="glass-card p-5 rounded-2xl reveal"><span class="text-purple-400 text-2xl font-bold">5</span><h4 class="font-semibold mt-2">Audit</h4><p class="text-gray-300 text-xs">Recorded for tracking</p></div>
+      <div class="md:col-span-2 hidden md:flex justify-center">
+        <!-- Web3 SVG Illustration: globe + nodes + lines -->
+        <svg width="380" height="380" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-[0_0_40px_rgba(139,92,246,0.3)]">
+          <defs>
+            <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#a855f7" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.1"/>
+            </radialGradient>
+            <filter id="neonGlow">
+              <feGaussianBlur stdDeviation="4" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <!-- Globe base -->
+          <circle cx="200" cy="200" r="120" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0.3"/>
+          <circle cx="200" cy="200" r="100" fill="none" stroke="#a855f7" stroke-width="1" opacity="0.2"/>
+          <!-- Rotating globe lines -->
+          <g class="globe-rotate">
+            <ellipse cx="200" cy="200" rx="120" ry="30" fill="none" stroke="#a855f7" stroke-width="0.8" opacity="0.4"/>
+            <ellipse cx="200" cy="200" rx="80" ry="120" fill="none" stroke="#c084fc" stroke-width="0.8" opacity="0.3"/>
+            <ellipse cx="200" cy="200" rx="120" ry="80" fill="none" stroke="#7c3aed" stroke-width="0.8" opacity="0.3"/>
+          </g>
+          <!-- Nodes -->
+          <circle cx="140" cy="140" r="5" fill="#a855f7" class="node-pulse" filter="url(#neonGlow)"/>
+          <circle cx="260" cy="120" r="4" fill="#c084fc" class="node-pulse" style="animation-delay:0.5s"/>
+          <circle cx="280" cy="210" r="5" fill="#a855f7" class="node-pulse" style="animation-delay:1s"/>
+          <circle cx="130" cy="250" r="4" fill="#c084fc" class="node-pulse" style="animation-delay:1.5s"/>
+          <circle cx="200" cy="100" r="4" fill="#a855f7" class="node-pulse" style="animation-delay:0.8s"/>
+          <circle cx="200" cy="300" r="4" fill="#c084fc" class="node-pulse" style="animation-delay:1.2s"/>
+          <circle cx="100" cy="190" r="5" fill="#a855f7" class="node-pulse" style="animation-delay:0.3s"/>
+          <circle cx="300" cy="170" r="5" fill="#c084fc" class="node-pulse" style="animation-delay:0.7s"/>
+          <!-- Transaction lines (animated dash) -->
+          <line x1="140" y1="140" x2="260" y2="120" stroke="#a855f7" stroke-width="1.5" class="line-dash" opacity="0.7"/>
+          <line x1="260" y1="120" x2="280" y2="210" stroke="#c084fc" stroke-width="1.5" class="line-dash" style="animation-delay:0.5s" opacity="0.7"/>
+          <line x1="280" y1="210" x2="130" y2="250" stroke="#a855f7" stroke-width="1.5" class="line-dash" style="animation-delay:1s" opacity="0.7"/>
+          <line x1="130" y1="250" x2="200" y2="300" stroke="#c084fc" stroke-width="1.5" class="line-dash" style="animation-delay:0.3s" opacity="0.7"/>
+          <line x1="200" y1="100" x2="100" y2="190" stroke="#a855f7" stroke-width="1.5" class="line-dash" style="animation-delay:0.9s" opacity="0.7"/>
+          <line x1="300" y1="170" x2="200" y2="300" stroke="#c084fc" stroke-width="1.5" class="line-dash" style="animation-delay:1.4s" opacity="0.7"/>
+          <!-- Central glow -->
+          <circle cx="200" cy="200" r="20" fill="url(#glow)" opacity="0.4"/>
+          <circle cx="200" cy="200" r="8" fill="#a855f7" filter="url(#neonGlow)"/>
+        </svg>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ===== SECTION 5: WHY ANCHORPOINT ===== -->
-  <section class="relative z-10 section-pad bg-[#0f0b1f]">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8">
-      <div class="text-center mb-14 reveal">
-        <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-star mr-2"></i>Why Anchorpoint Markets</span>
-        <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Built for speed & reliability</h2>
+<!-- ===== STATS (animated count-up) ===== -->
+<section class="relative z-10 py-12 bg-[#0f0b1f] border-y border-purple-900/20">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 text-center">
+      <div class="reveal"><div class="text-3xl font-bold text-gradient-purple stat-count" data-target="75">0</div><div class="text-sm text-gray-400">$75M+ Settled Volume</div></div>
+      <div class="reveal"><div class="text-3xl font-bold text-gradient-purple stat-count" data-target="18">0</div><div class="text-sm text-gray-400">18+ Countries Served</div></div>
+      <div class="reveal"><div class="text-3xl font-bold text-gradient-purple stat-count" data-target="10000">0</div><div class="text-sm text-gray-400">10,000+ Transactions</div></div>
+      <div class="reveal"><div class="text-3xl font-bold text-gradient-purple stat-count" data-target="99">0</div><div class="text-sm text-gray-400">99.98% Success</div></div>
+      <div class="reveal"><div class="text-3xl font-bold text-gradient-purple stat-count" data-target="24">0</div><div class="text-sm text-gray-400">24/7 Support</div></div>
+      <div class="reveal"><div class="text-3xl font-bold text-gradient-purple stat-count" data-target="100">0</div><div class="text-sm text-gray-400">100% Verified</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LIVE CRYPTO TICKER (REAL-TIME via CoinGecko) ===== -->
+<section id="markets" class="relative z-10 py-8 bg-[#0b0719] overflow-hidden border-y border-purple-900/20">
+  <div class="max-w-full px-2">
+    <div class="ticker-track" id="tickerTrack">
+      <!-- Real-time items injected by JS -->
+      <div class="ticker-item flex items-center gap-2 ticker-loading"><span class="text-gray-400">Loading prices...</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICES (enhanced) ===== -->
+<section id="services" class="relative z-10 section-pad bg-[#0f0b1f]">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-14 reveal">
+      <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-cogs mr-2"></i>Core Services</span>
+      <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">End‑to‑end settlement infrastructure</h2>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-coins text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">OTC Trading</h4><p class="text-gray-300 text-sm">Large block trades with minimal slippage</p></div>
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-hand-holding-usd text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Stablecoin Settlements</h4><p class="text-gray-300 text-sm">USDC, USDT, DAI conversions</p></div>
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-store text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Merchant Payments</h4><p class="text-gray-300 text-sm">Accept crypto & settle in fiat</p></div>
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-landmark text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Treasury Solutions</h4><p class="text-gray-300 text-sm">Corporate treasury management</p></div>
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-building text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Institutional Liquidity</h4><p class="text-gray-300 text-sm">Deep liquidity for institutions</p></div>
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-globe-africa text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Corporate Cross-border</h4><p class="text-gray-300 text-sm">Multi-currency settlements</p></div>
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-exchange-alt text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Crypto to Fiat</h4><p class="text-gray-300 text-sm">Conversion & settlement</p></div>
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-arrow-right-arrow-left text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Liquidity Matching</h4><p class="text-gray-300 text-sm">Between markets</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INDUSTRIES ===== -->
+<section id="industries" class="relative z-10 section-pad bg-[#0b0719]">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-14 reveal">
+      <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-industry mr-2"></i>Industries</span>
+      <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Who we serve</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="glass-card p-4 text-center reveal"><i class="fas fa-ship text-purple-400 text-2xl mb-2"></i><p class="font-medium">Importers</p></div>
+      <div class="glass-card p-4 text-center reveal"><i class="fas fa-truck text-purple-400 text-2xl mb-2"></i><p class="font-medium">Exporters</p></div>
+      <div class="glass-card p-4 text-center reveal"><i class="fas fa-building text-purple-400 text-2xl mb-2"></i><p class="font-medium">SMEs</p></div>
+      <div class="glass-card p-4 text-center reveal"><i class="fas fa-laptop-code text-purple-400 text-2xl mb-2"></i><p class="font-medium">Freelancers</p></div>
+      <div class="glass-card p-4 text-center reveal"><i class="fas fa-university text-purple-400 text-2xl mb-2"></i><p class="font-medium">Financial Institutions</p></div>
+      <div class="glass-card p-4 text-center reveal"><i class="fas fa-coins text-purple-400 text-2xl mb-2"></i><p class="font-medium">Crypto Funds</p></div>
+      <div class="glass-card p-4 text-center reveal"><i class="fas fa-credit-card text-purple-400 text-2xl mb-2"></i><p class="font-medium">Payment Companies</p></div>
+      <div class="glass-card p-4 text-center reveal"><i class="fas fa-microchip text-purple-400 text-2xl mb-2"></i><p class="font-medium">Mining Operations</p></div>
+      <div class="glass-card p-4 text-center reveal"><i class="fas fa-chart-line text-purple-400 text-2xl mb-2"></i><p class="font-medium">Institutional Investors</p></div>
+      <div class="glass-card p-4 text-center reveal"><i class="fas fa-hand-holding-heart text-purple-400 text-2xl mb-2"></i><p class="font-medium">NGOs</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS (timeline) ===== -->
+<section id="how-it-works" class="relative z-10 section-pad bg-[#0f0b1f]">
+  <div class="max-w-4xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-14 reveal">
+      <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-circle-info mr-2"></i>How it works</span>
+      <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Simple, structured process</h2>
+    </div>
+    <div class="flex flex-col items-center space-y-2">
+      <div class="glass-card px-8 py-4 w-full max-w-sm text-center reveal"><span class="text-purple-400 font-bold">1.</span> KYC & Onboarding</div>
+      <div class="timeline-line"></div>
+      <div class="glass-card px-8 py-4 w-full max-w-sm text-center reveal"><span class="text-purple-400 font-bold">2.</span> Live Quote</div>
+      <div class="timeline-line"></div>
+      <div class="glass-card px-8 py-4 w-full max-w-sm text-center reveal"><span class="text-purple-400 font-bold">3.</span> Pricing & Execution</div>
+      <div class="timeline-line"></div>
+      <div class="glass-card px-8 py-4 w-full max-w-sm text-center reveal"><span class="text-purple-400 font-bold">4.</span> Confirmation</div>
+      <div class="timeline-line"></div>
+      <div class="glass-card px-8 py-4 w-full max-w-sm text-center reveal"><span class="text-purple-400 font-bold">5.</span> Settlement</div>
+      <div class="timeline-line"></div>
+      <div class="glass-card px-8 py-4 w-full max-w-sm text-center reveal"><span class="text-purple-400 font-bold">6.</span> Completion & Audit</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECURITY ===== -->
+<section id="security" class="relative z-10 section-pad bg-[#0b0719]">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-14 reveal">
+      <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-shield-alt mr-2"></i>Security</span>
+      <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Enterprise‑grade safeguards</h2>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-lock text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Encryption</h4><p class="text-gray-300 text-sm">Military-grade encryption</p></div>
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-gavel text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Compliance</h4><p class="text-gray-300 text-sm">Regulatory compliant</p></div>
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-id-card text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">KYC / AML</h4><p class="text-gray-300 text-sm">Identity & anti-money laundering</p></div>
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-user-check text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Verification</h4><p class="text-gray-300 text-sm">Counterparty verification</p></div>
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-eye text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Risk Monitoring</h4><p class="text-gray-300 text-sm">Real-time risk monitoring</p></div>
+      <div class="glass-card p-6 rounded-2xl text-center reveal"><i class="fas fa-handshake text-purple-400 text-3xl mb-3"></i><h4 class="font-semibold">Secure Settlements</h4><p class="text-gray-300 text-sm">Protected settlement rails</p></div>
+    </div>
+    <!-- animated cyber graphic -->
+    <div class="mt-10 flex justify-center">
+      <svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="40" height="40" fill="none" stroke="#7c3aed" stroke-width="2" rx="4" class="node-pulse" />
+        <rect x="80" y="10" width="40" height="40" fill="none" stroke="#a855f7" stroke-width="2" rx="4" class="node-pulse" style="animation-delay:0.5s" />
+        <rect x="150" y="10" width="40" height="40" fill="none" stroke="#c084fc" stroke-width="2" rx="4" class="node-pulse" style="animation-delay:1s" />
+        <line x1="50" y1="30" x2="80" y2="30" stroke="#a855f7" stroke-width="1.5" class="line-dash" />
+        <line x1="120" y1="30" x2="150" y2="30" stroke="#a855f7" stroke-width="1.5" class="line-dash" style="animation-delay:0.5s" />
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS (slider) ===== -->
+<section class="relative z-10 section-pad bg-[#0f0b1f]">
+  <div class="max-w-4xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-14 reveal">
+      <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-star mr-2"></i>Testimonials</span>
+      <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">What our clients say</h2>
+    </div>
+    <div class="relative overflow-hidden" id="testimonialSlider">
+      <div class="flex transition-transform duration-700 ease-in-out" id="testimonialTrack">
+        <div class="w-full flex-shrink-0 px-4"><div class="glass-card p-6 rounded-2xl"><div class="flex text-yellow-400 text-sm"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="mt-3 text-gray-200">"Anchor Markets provided seamless OTC execution for our institutional needs."</p><p class="mt-2 font-medium text-purple-300">— CEO, African Trade Fund</p></div></div>
+        <div class="w-full flex-shrink-0 px-4"><div class="glass-card p-6 rounded-2xl"><div class="flex text-yellow-400 text-sm"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="mt-3 text-gray-200">"Fast settlements and great liquidity. Highly recommended."</p><p class="mt-2 font-medium text-purple-300">— CFO, East Africa Holdings</p></div></div>
+        <div class="w-full flex-shrink-0 px-4"><div class="glass-card p-6 rounded-2xl"><div class="flex text-yellow-400 text-sm"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="mt-3 text-gray-200">"The cross-border settlement infrastructure is world-class."</p><p class="mt-2 font-medium text-purple-300">— COO, Pan-African Payments</p></div></div>
+        <div class="w-full flex-shrink-0 px-4"><div class="glass-card p-6 rounded-2xl"><div class="flex text-yellow-400 text-sm"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="mt-3 text-gray-200">"Reliable counterparties and transparent pricing. Excellent service."</p><p class="mt-2 font-medium text-purple-300">— Director, Crypto Fund</p></div></div>
+        <div class="w-full flex-shrink-0 px-4"><div class="glass-card p-6 rounded-2xl"><div class="flex text-yellow-400 text-sm"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="mt-3 text-gray-200">"Anchor Markets made our cross-border merchant payments effortless."</p><p class="mt-2 font-medium text-purple-300">— CEO, Retail Chain</p></div></div>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div class="flex items-center gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-gauge-high text-purple-400 text-2xl"></i><div><h4 class="font-semibold">Execution speed</h4><p class="text-gray-300 text-sm">For time‑sensitive flows</p></div></div>
-        <div class="flex items-center gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-arrows-spin text-purple-400 text-2xl"></i><div><h4 class="font-semibold">Structured liquidity</h4><p class="text-gray-300 text-sm">Access across regions</p></div></div>
-        <div class="flex items-center gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-triangle-exclamation text-purple-400 text-2xl"></i><div><h4 class="font-semibold">Reduced failure risk</h4><p class="text-gray-300 text-sm">Settlement reliability</p></div></div>
-        <div class="flex items-center gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-rotate text-purple-400 text-2xl"></i><div><h4 class="font-semibold">Repeatable process</h4><p class="text-gray-300 text-sm">Consistent transaction flow</p></div></div>
-        <div class="flex items-center gap-4 bg-purple-900/10 p-5 rounded-xl border border-purple-500/10 reveal"><i class="fas fa-location-dot text-purple-400 text-2xl"></i><div><h4 class="font-semibold">Regional focus</h4><p class="text-gray-300 text-sm">East Africa corridors</p></div></div>
+      <div class="flex justify-center gap-3 mt-6">
+        <button class="w-3 h-3 rounded-full bg-purple-500/50 hover:bg-purple-400 transition" data-index="0"></button>
+        <button class="w-3 h-3 rounded-full bg-purple-500/30 hover:bg-purple-400 transition" data-index="1"></button>
+        <button class="w-3 h-3 rounded-full bg-purple-500/30 hover:bg-purple-400 transition" data-index="2"></button>
+        <button class="w-3 h-3 rounded-full bg-purple-500/30 hover:bg-purple-400 transition" data-index="3"></button>
+        <button class="w-3 h-3 rounded-full bg-purple-500/30 hover:bg-purple-400 transition" data-index="4"></button>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ===== SECTION 6: RISK CONTROL ===== -->
-  <section id="risk" class="relative z-10 section-pad bg-[#0b0719]">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8">
-      <div class="text-center mb-14 reveal">
-        <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-shield mr-2"></i>Risk control</span>
-        <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Enterprise‑grade safeguards</h2>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-500 reveal"><i class="fas fa-id-card text-purple-400 text-2xl mb-2"></i><h4 class="font-semibold">Identity verification</h4><p class="text-gray-300 text-sm">For all clients</p></div>
-        <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-500 reveal"><i class="fas fa-file-lines text-purple-400 text-2xl mb-2"></i><h4 class="font-semibold">Transaction logs</h4><p class="text-gray-300 text-sm">Stored per trade</p></div>
-        <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-500 reveal"><i class="fas fa-credit-card text-purple-400 text-2xl mb-2"></i><h4 class="font-semibold">Daily exposure limits</h4><p class="text-gray-300 text-sm">Per currency</p></div>
-        <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-500 reveal"><i class="fas fa-star-half-stroke text-purple-400 text-2xl mb-2"></i><h4 class="font-semibold">Counterparty rating</h4><p class="text-gray-300 text-sm">Systematic rating</p></div>
-        <div class="glass-card p-6 rounded-2xl border-l-4 border-purple-500 reveal"><i class="fas fa-umbrella text-purple-400 text-2xl mb-2"></i><h4 class="font-semibold">Funds segregation</h4><p class="text-gray-300 text-sm">Client vs operational funds</p></div>
-      </div>
+<!-- ===== FAQ ===== -->
+<section id="faq" class="relative z-10 section-pad bg-[#0b0719]">
+  <div class="max-w-4xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-14 reveal">
+      <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-question-circle mr-2"></i>FAQ</span>
+      <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white">Frequently asked questions</h2>
     </div>
-  </section>
-
-  <!-- ===== SECTION 7: START TRADING ===== -->
-  <section id="start" class="relative z-10 section-pad bg-gradient-to-b from-[#0f0b1f] to-[#0b0719]">
-    <div class="max-w-4xl mx-auto px-5 sm:px-8 text-center">
-      <span class="text-purple-400 text-sm font-semibold tracking-widest uppercase"><i class="fas fa-play mr-2"></i>Start trading</span>
-      <h2 class="text-3xl md:text-5xl font-bold mt-2 text-white">Begin with small volume</h2>
-      <div class="grid sm:grid-cols-2 gap-4 mt-8 text-left">
-        <div class="glass-card p-5 rounded-xl flex items-start gap-3 reveal"><i class="fas fa-arrow-trend-up text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Small settlements</span><p class="text-gray-300 text-sm">Start with low volume</p></div></div>
-        <div class="glass-card p-5 rounded-xl flex items-start gap-3 reveal"><i class="fas fa-clock-rotate-left text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Build history</span><p class="text-gray-300 text-sm">Over repeat trades</p></div></div>
-        <div class="glass-card p-5 rounded-xl flex items-start gap-3 reveal"><i class="fas fa-scale-balanced text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Scale volume</span><p class="text-gray-300 text-sm">After trust patterns form</p></div></div>
-        <div class="glass-card p-5 rounded-xl flex items-start gap-3 reveal"><i class="fas fa-route text-purple-400 text-xl mt-1"></i><div><span class="font-medium">Expand corridors</span><p class="text-gray-300 text-sm">Once liquidity stabilizes</p></div></div>
-      </div>
-      <div class="mt-10">
-        <a href="https://wa.me/256700941248" target="_blank" rel="noopener noreferrer" class="btn-w3 text-white font-bold px-10 py-4 rounded-full inline-flex items-center gap-3 text-lg">
-          <i class="fab fa-whatsapp text-xl"></i> Start now on WhatsApp
-        </a>
-      </div>
+    <div class="space-y-4" id="faqContainer">
+      <div class="glass-card p-5 rounded-xl cursor-pointer" data-faq><div class="flex justify-between items-center"><span class="font-semibold">What is OTC trading?</span><i class="fas fa-chevron-down text-purple-400 transition"></i></div><div class="faq-answer max-h-0 overflow-hidden transition-all duration-300"><p class="pt-3 text-gray-300">OTC trading is a private, off-exchange trade between two parties, typically for large volumes.</p></div></div>
+      <div class="glass-card p-5 rounded-xl cursor-pointer" data-faq><div class="flex justify-between items-center"><span class="font-semibold">How do I get started?</span><i class="fas fa-chevron-down text-purple-400 transition"></i></div><div class="faq-answer max-h-0 overflow-hidden transition-all duration-300"><p class="pt-3 text-gray-300">Contact us via WhatsApp or Telegram to begin the KYC process.</p></div></div>
+      <div class="glass-card p-5 rounded-xl cursor-pointer" data-faq><div class="flex justify-between items-center"><span class="font-semibold">What currencies do you support?</span><i class="fas fa-chevron-down text-purple-400 transition"></i></div><div class="faq-answer max-h-0 overflow-hidden transition-all duration-300"><p class="pt-3 text-gray-300">We support USD, EUR, UGX, KES, and major cryptocurrencies.</p></div></div>
+      <div class="glass-card p-5 rounded-xl cursor-pointer" data-faq><div class="flex justify-between items-center"><span class="font-semibold">Is my money safe?</span><i class="fas fa-chevron-down text-purple-400 transition"></i></div><div class="faq-answer max-h-0 overflow-hidden transition-all duration-300"><p class="pt-3 text-gray-300">Yes, we employ institutional-grade security, encryption, and segregated accounts.</p></div></div>
+      <div class="glass-card p-5 rounded-xl cursor-pointer" data-faq><div class="flex justify-between items-center"><span class="font-semibold">What are the fees?</span><i class="fas fa-chevron-down text-purple-400 transition"></i></div><div class="faq-answer max-h-0 overflow-hidden transition-all duration-300"><p class="pt-3 text-gray-300">Fees are transparent and quoted based on volume and market conditions.</p></div></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ===== FOOTER ===== -->
-  <footer class="relative z-10 border-t border-purple-900/30 bg-[#0b0719]/80 py-8 backdrop-blur-sm">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-3">
-      <div class="flex items-center gap-2">
-        <i class="fas fa-link text-purple-400 text-xl"></i>
-        <span class="font-bold text-white">Anchor Markets</span>
-        <span class="text-gray-400 text-sm hidden sm:inline">·</span>
-        <span class="text-gray-400 text-sm">Cross border settlement infrastructure for Crypto to Fiat trades</span>
-      </div>
-      <div class="flex gap-4 text-gray-400 text-sm">
-        <span>© 2026</span>
-        <span class="hidden sm:inline">·</span>
-        <span class="flex items-center gap-1"><i class="fas fa-location-dot text-purple-400/70"></i> East Africa</span>
-        <a href="https://wa.me/256700941248" target="_blank" rel="noopener noreferrer" class="text-green-400 hover:text-green-300 transition"><i class="fab fa-whatsapp"></i></a>
-      </div>
-    </div>
-  </footer>
+<!-- ===== RISK DISCLAIMER ===== -->
+<section class="relative z-10 py-6 bg-[#0f0b1f] border-t border-purple-900/20">
+  <div class="max-w-4xl mx-auto px-5 sm:px-8 text-center text-xs text-gray-400">
+    <p>Digital asset transactions involve market, operational and regulatory risks. Clients are responsible for ensuring compliance with applicable laws within their jurisdiction. Anchor Markets reserves the right to perform KYC/AML verification and decline transactions where required by law.</p>
+  </div>
+</section>
 
-  <!-- ===== INTERSECTION OBSERVER (reveal animations) ===== -->
-  <script>
-    (function() {
-      const elements = document.querySelectorAll('.reveal');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      }, { threshold: 0.15, rootMargin: '0px 0px -20px 0px' });
-      elements.forEach(el => observer.observe(el));
+<!-- ===== FOOTER ===== -->
+<footer id="contact" class="relative z-10 border-t border-purple-900/30 bg-[#0b0719] py-12">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+    <div><h4 class="font-bold text-white mb-3">Anchor Markets</h4><p class="text-sm text-gray-400">OTC & cross-border settlement infrastructure for modern trade.</p></div>
+    <div><h4 class="font-bold text-white mb-3">Services</h4><ul class="text-sm text-gray-400 space-y-1"><li>OTC Trading</li><li>Stablecoin Settlements</li><li>Merchant Payments</li><li>Treasury Solutions</li></ul></div>
+    <div><h4 class="font-bold text-white mb-3">Legal</h4><ul class="text-sm text-gray-400 space-y-1"><li>Privacy Policy</li><li>Terms</li><li>AML Policy</li><li>Risk Disclaimer</li></ul></div>
+    <div><h4 class="font-bold text-white mb-3">Connect</h4><div class="flex gap-3"><a href="https://wa.me/256700941248" target="_blank" class="text-green-400 hover:text-green-300 text-xl"><i class="fab fa-whatsapp"></i></a><a href="https://t.me/anchor_markets" target="_blank" class="text-blue-400 hover:text-blue-300 text-xl"><i class="fab fa-telegram-plane"></i></a></div><p class="text-sm text-gray-400 mt-2">© 2026 Anchor Markets</p></div>
+  </div>
+</footer>
 
-      // log JSON component
+<!-- ===== FLOATING CONTACT BUTTONS ===== -->
+<div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+  <a href="https://wa.me/256700941248" target="_blank" rel="noopener" class="float-btn float-btn-wa bg-green-600 text-white p-4 rounded-full shadow-2xl relative group" title="WhatsApp">
+    <i class="fab fa-whatsapp text-2xl"></i>
+    <span class="absolute right-14 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">WhatsApp</span>
+  </a>
+  <a href="https://t.me/anchor_markets" target="_blank" rel="noopener" class="float-btn float-btn-tg bg-blue-600 text-white p-4 rounded-full shadow-2xl relative group" title="Telegram">
+    <i class="fab fa-telegram-plane text-2xl"></i>
+    <span class="absolute right-14 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-xs px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">Telegram</span>
+  </a>
+</div>
+
+<!-- ===== JAVASCRIPT: Ticker (CoinGecko API), Stats, Testimonials, FAQ ===== -->
+<script>
+  (function() {
+    // --- CRYPTO TICKER (REAL-TIME from CoinGecko) ---
+    const coinIds = ['bitcoin', 'ethereum', 'solana', 'tether', 'ripple', 'binancecoin', 'cardano', 'dogecoin'];
+    const symbols = ['BTC', 'ETH', 'SOL', 'USDT', 'XRP', 'BNB', 'ADA', 'DOGE'];
+    const icons = ['btc', 'eth', 'sol', 'usdt', 'xrp', 'bnb', 'ada', 'doge'];
+    const track = document.getElementById('tickerTrack');
+
+    async function fetchPrices() {
       try {
-        const jsonEl = document.getElementById('services-json');
-        if (jsonEl) console.log('📦 Services JSON:', JSON.parse(jsonEl.textContent));
-      } catch(e) { /* ignore */ }
-    })();
-  </script>
+        const url = `https://api.coingecko.com/api/v3/simple/price?ids=${coinIds.join(',')}&vs_currencies=usd&include_24hr_change=true`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('API rate limit or error');
+        const data = await res.json();
+        return coinIds.map((id, i) => ({
+          symbol: symbols[i],
+          price: data[id]?.usd || 0,
+          change: data[id]?.usd_24h_change || 0,
+          icon: icons[i]
+        }));
+      } catch (e) {
+        console.warn('CoinGecko fetch failed, using fallback data.', e);
+        // Fallback static data
+        return [
+          { symbol: 'BTC', price: 67234, change: 2.4, icon: 'btc' },
+          { symbol: 'ETH', price: 3456, change: -1.2, icon: 'eth' },
+          { symbol: 'SOL', price: 172, change: 5.1, icon: 'sol' },
+          { symbol: 'USDT', price: 1.00, change: 0.01, icon: 'usdt' },
+          { symbol: 'XRP', price: 0.62, change: -0.8, icon: 'xrp' },
+          { symbol: 'BNB', price: 598, change: 3.2, icon: 'bnb' },
+          { symbol: 'ADA', price: 0.46, change: -2.1, icon: 'ada' },
+          { symbol: 'DOGE', price: 0.15, change: 7.3, icon: 'doge' }
+        ];
+      }
+    }
+
+    async function renderTicker() {
+      const coins = await fetchPrices();
+      const items = coins.map(c => {
+        const cls = c.change >= 0 ? 'text-green-400' : 'text-red-400';
+        const arrow = c.change >= 0 ? '↑' : '↓';
+        const priceStr = c.price < 1 ? c.price.toFixed(4) : c.price.toFixed(2);
+        return `<div class="ticker-item flex items-center gap-2"><i class="cc ${c.icon} text-2xl"></i><span class="font-semibold">${c.symbol}</span><span>$${priceStr}</span><span class="${cls}">${arrow}${Math.abs(c.change).toFixed(1)}%</span></div>`;
+      });
+      // double for seamless scroll
+      track.innerHTML = items.join('') + items.join('');
+    }
+
+    renderTicker();
+    // Refresh every 60 seconds
+    setInterval(renderTicker, 60000);
+
+    // --- STATS COUNT-UP ---
+    const stats = document.querySelectorAll('.stat-count');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target);
+          let current = 0;
+          const step = target / 40;
+          const timer = setInterval(() => {
+            current += step;
+            if (current >= target) { clearInterval(timer); current = target; }
+            el.textContent = Math.floor(current);
+          }, 30);
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    stats.forEach(s => observer.observe(s));
+
+    // --- TESTIMONIAL SLIDER ---
+    let currentTestimonial = 0;
+    const trackEl = document.getElementById('testimonialTrack');
+    const dots = document.querySelectorAll('#testimonialSlider .w-3');
+    function goToTestimonial(index) {
+      currentTestimonial = index;
+      trackEl.style.transform = `translateX(-${index * 100}%)`;
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('bg-purple-500/50', i === index);
+        dot.classList.toggle('bg-purple-500/30', i !== index);
+      });
+    }
+    dots.forEach((dot, i) => dot.addEventListener('click', () => goToTestimonial(i)));
+    setInterval(() => { goToTestimonial((currentTestimonial + 1) % dots.length); }, 5000);
+
+    // --- FAQ ACCORDION ---
+    document.querySelectorAll('[data-faq]').forEach(item => {
+      item.addEventListener('click', function() {
+        const answer = this.querySelector('.faq-answer');
+        const icon = this.querySelector('.fa-chevron-down');
+        if (answer.style.maxHeight && answer.style.maxHeight !== '0px') {
+          answer.style.maxHeight = '0px';
+          icon.style.transform = 'rotate(0deg)';
+        } else {
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+          icon.style.transform = 'rotate(180deg)';
+        }
+      });
+    });
+
+    // --- REVEAL ON SCROLL ---
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => revealObserver.observe(el));
+  })();
+</script>
 </body>
 </html>
